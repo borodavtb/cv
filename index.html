@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maksim Shamkou | R&D Lead Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: { 50: '#f7f7f5', 100: '#efefeb', 200: '#e0e0da', 300: '#c2c2b8', 400: '#a3a396', 500: '#858575', 600: '#6a6a5d', 700: '#525248', 800: '#3d3d36', 900: '#292925' },
+                        accent: { light: '#fdba74', DEFAULT: '#f97316', dark: '#c2410c' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #f7f7f5; scroll-behavior: smooth; }
+        .card { background-color: white; border-radius: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .animate-fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .velocity-bar { height: 8px; border-radius: 4px; background: #efefeb; position: relative; overflow: hidden; }
+        .velocity-fill { height: 100%; background: #f97316; transition: width 1s ease-in-out; }
+    </style>
+</head>
+<body class="text-brand-800 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-md shadow-sm border-b border-brand-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <img src="https://ui-avatars.com/api/?name=Maksim+Shamkou&background=292925&color=fff" class="h-14 w-14 rounded-xl border-2 border-accent" alt="Profile">
+                    <div class="absolute -top-1 -right-1 bg-accent text-white rounded-full p-1 animate-pulse">
+                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1a1 1 0 112 0v1a1 1 0 11-2 0zM13.536 15.657l-.707-.707a1 1 0 011.414-1.414l.707.707a1 1 0 01-1.414 1.414zM15 10a1 1 0 11-2 0 1 1 0 012 0z" /></svg>
+                    </div>
+                </div>
+                <div>
+                    <h1 id="user-name" class="text-xl font-bold text-brand-900 leading-none">Максим Шамков</h1>
+                    <p id="header-subtitle" class="text-xs text-brand-500 mt-1 uppercase tracking-widest"></p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button onclick="toggleLang()" class="text-xs font-bold px-4 py-2 border border-brand-200 rounded-full hover:bg-brand-100 transition-colors uppercase" id="lang-switch">EN</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Sidebar -->
+            <aside class="lg:col-span-3 space-y-6">
+                <!-- Velocity Indicator (NEW VERSION) -->
+                <div class="card p-6 bg-brand-900 text-white">
+                    <h3 id="velocity-title" class="text-[10px] uppercase font-bold text-accent mb-4 tracking-widest"></h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-2 uppercase font-bold">
+                                <span id="vel-label-me">Моя скорость (MVP)</span>
+                                <span class="text-accent" id="vel-val-me">6 нед</span>
+                            </div>
+                            <div class="velocity-bar"><div class="velocity-fill" style="width: 25%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-2 uppercase font-bold text-brand-400">
+                                <span id="vel-label-market">Рынок (Среднее)</span>
+                                <span id="vel-val-market">24 нед</span>
+                            </div>
+                            <div class="velocity-bar"><div class="bg-brand-700 h-full" style="width: 100%"></div></div>
+                        </div>
+                        <p id="vel-note" class="text-[10px] text-brand-400 italic mt-4"></p>
+                    </div>
+                </div>
+
+                <!-- Expertise Chart -->
+                <div class="card p-5">
+                    <h3 id="skills-title" class="text-xs uppercase font-bold text-brand-400 mb-4 tracking-widest"></h3>
+                    <div class="h-[220px]"><canvas id="skillsChart"></canvas></div>
+                </div>
+
+                <!-- Info -->
+                <div class="card p-6">
+                    <h3 id="contact-title" class="text-xs uppercase font-bold text-brand-400 mb-4 tracking-widest"></h3>
+                    <div class="space-y-4 text-xs">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-brand-300 w-4 font-bold">📍</span>
+                            <span id="loc-val"></span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <span class="text-brand-300 w-4 font-bold">🎓</span>
+                            <span id="edu-val"></span>
+                        </div>
+                        <div class="flex items-center space-x-3 pt-4 border-t border-brand-50">
+                            <span class="text-brand-300 w-4 font-bold">🔗</span>
+                            <a href="https://www.linkedin.com/in/maksim-shamkou-782179207" target="_blank" class="text-accent font-bold hover:underline">LinkedIn</a>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <div class="lg:col-span-9 space-y-6">
+                <!-- Summary -->
+                <section class="card p-8 border-t-4 border-accent relative overflow-hidden">
+                    <h2 id="summary-label" class="text-lg font-bold mb-4"></h2>
+                    <p id="summary-content" class="text-brand-600 text-sm leading-relaxed mb-8 max-w-3xl"></p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="bg-brand-50 p-4 rounded-xl text-center">
+                            <div class="text-2xl font-bold text-brand-900">4x</div>
+                            <div class="text-[10px] text-brand-400 uppercase font-bold mt-1" id="stat-mvp"></div>
+                        </div>
+                        <div class="bg-brand-50 p-4 rounded-xl text-center">
+                            <div class="text-2xl font-bold text-brand-900">100%</div>
+                            <div class="text-[10px] text-brand-400 uppercase font-bold mt-1" id="stat-ai"></div>
+                        </div>
+                        <div class="bg-brand-50 p-4 rounded-xl text-center">
+                            <div class="text-2xl font-bold text-brand-900">15+</div>
+                            <div class="text-[10px] text-brand-400 uppercase font-bold mt-1" id="stat-val"></div>
+                        </div>
+                        <div class="bg-brand-50 p-4 rounded-xl text-center">
+                            <div class="text-2xl font-bold text-brand-900">6+</div>
+                            <div class="text-[10px] text-brand-400 uppercase font-bold mt-1" id="stat-exp"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Experience -->
+                <div class="space-y-4">
+                    <h3 id="exp-header" class="text-xs uppercase font-bold text-brand-400 ml-2 tracking-widest"></h3>
+                    <div id="experience-section" class="space-y-4"></div>
+                </div>
+
+                <!-- Focus & Case -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="card p-6">
+                        <h3 id="focus-title" class="text-xs uppercase font-bold text-brand-400 mb-6 tracking-widest"></h3>
+                        <ul id="focus-list" class="space-y-4 text-xs"></ul>
+                    </div>
+                    <div class="card p-6 border-dashed border-2 border-brand-200">
+                        <h3 id="case-title" class="text-xs uppercase font-bold text-brand-400 mb-6 tracking-widest"></h3>
+                        <div id="case-content" class="space-y-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-brand-200 py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <p class="text-[10px] text-brand-400 uppercase tracking-widest font-bold">Maksim Shamkou &copy; 2025 | R&D Lead Portfolio</p>
+        </div>
+    </footer>
+
+    <script>
+        let lang = 'ru';
+        let charts = {};
+
+        const content = {
+            ru: {
+                name: "Максим Шамков",
+                subtitle: "R&D Lead • Инновации • Игры",
+                velocityTitle: "Эффективность разработки",
+                velLabelMe: "Мой темп (MVP)",
+                velValMe: "6 нед",
+                velLabelMarket: "Рынок (Среднее)",
+                velValMarket: "24 нед",
+                velNote: "*В 4 раза быстрее рыночного стандарта разработки первой итерации.",
+                skillsTitle: "Компетенции",
+                contactTitle: "Информация",
+                loc: "Варшава, Польша",
+                edu: "Инженер-программист (ВГТУ)",
+                summaryLabel: "Executive Summary",
+                summary: "R&D Lead с более чем 6-летним опытом в геймдеве. Специализируюсь на быстром прототипировании, ранней валидации и принятии решений Go/No-Go на основе данных. Доказанная способность создавать MVP за 3-8 недель для гиперказуальных, казуальных, мобильных и ПК проектов.",
+                statMvp: "Ускорение MVP",
+                statAi: "AI-Driven",
+                statVal: "Валидаций в год",
+                statExp: "Лет опыта",
+                expHeader: "Профессиональный опыт",
+                focusTitle: "Зоны фокуса R&D",
+                caseTitle: "Дополнительные кейсы",
+                skills: ["Геймплей", "Бизнес", "Технологии", "Процессы", "Лидерство"],
+                history: [
+                    { 
+                        company: "Kaelis AI", 
+                        role: "Founder / R&D Lead", 
+                        period: "Июль 2025 — Наст. время",
+                        desc: "Руководство R&D песочницей, сфокусированной на AI-пайплайнах. Создание MVP за 6-8 недель. Интеграция AI в полный цикл разработки: идея, контент, валидация." 
+                    },
+                    { 
+                        company: "Oblocze (G-Devs)", 
+                        role: "R&D Team Lead", 
+                        period: "2022 — 2024",
+                        desc: "Управление отделом прототипирования. Валидация 15+ концептов ежегодно. Оценка технической сложности и расчет ROI для новых механик." 
+                    },
+                    { 
+                        company: "Game Factory", 
+                        role: "R&D Lead / Team Lead", 
+                        period: "2018 — 2022",
+                        desc: "Руководство R&D для международных клиентов (Mobile/PC). Управление кросс-функциональными командами до 12 человек. Определение метрик успеха (retention, engagement)." 
+                    }
+                ],
+                focusItems: [
+                    "Валидация механик (HC, Casual, PC)",
+                    "Эксперименты с экономикой (Ad, IAP)",
+                    "Технические спайки и ограничения платформ",
+                    "Валидация гипотез через AI-прототипирование"
+                ],
+                extraCase: {
+                    title: "Web3 / NFT Game Concept",
+                    desc: "Разработка концепта от идеи до питча. Проект остановлен из-за высоких рыночных рисков."
+                }
+            },
+            en: {
+                name: "Maksim Shamkou",
+                subtitle: "R&D Lead • Innovation • Games",
+                velocityTitle: "Development Efficiency",
+                velLabelMe: "My Tempo (MVP)",
+                velValMe: "6 weeks",
+                velLabelMarket: "Market (Avg)",
+                velValMarket: "24 weeks",
+                velNote: "*4x faster than the market average for first-iteration delivery.",
+                skillsTitle: "Expertise Radar",
+                contactTitle: "Information",
+                loc: "Warsaw, Poland",
+                edu: "Software Engineer (VSTU)",
+                summaryLabel: "Executive Summary",
+                summary: "R&D Lead with 6+ years of experience in game development, specializing in rapid prototyping and data-driven decisions. Proven ability to build MVPs in 3–8 weeks across various platforms.",
+                statMvp: "MVP Acceleration",
+                statAi: "AI-Driven",
+                statVal: "Validations / Year",
+                statExp: "Years Exp",
+                expHeader: "Professional Experience",
+                focusTitle: "R&D Focus Areas",
+                caseTitle: "Additional Cases",
+                skills: ["Gameplay", "Business", "Tech", "Processes", "Leadership"],
+                history: [
+                    { 
+                        company: "Kaelis AI", 
+                        role: "Founder / R&D Lead", 
+                        period: "July 2025 — Present",
+                        desc: "Founder-led R&D and product sandbox focused on AI-assisted workflows. Delivered MVP in 6–8 weeks. Full AI integration: ideation, content, validation." 
+                    },
+                    { 
+                        company: "Oblocze (G-Devs)", 
+                        role: "R&D Team Lead", 
+                        period: "2022 — 2024",
+                        desc: "Managed prototyping department. Validated 15+ concepts annually. Technical feasibility spikes and ROI calculation." 
+                    },
+                    { 
+                        company: "Game Factory", 
+                        role: "R&D Lead / Team Lead", 
+                        period: "2018 — 2022",
+                        desc: "Led R&D for international clients (Mobile/PC). Managed teams up to 12 people. Defined success metrics (retention, engagement)." 
+                    }
+                ],
+                focusItems: [
+                    "Mechanics validation (HC, Casual, PC)",
+                    "Economy experiments (Ad, IAP, Sub)",
+                    "Tech spikes and platform constraints",
+                    "AI-assisted hypothesis validation"
+                ],
+                extraCase: {
+                    title: "Web3 / NFT Game Concept",
+                    desc: "Developed concept from idea to pitch. Project halted due to high market risks."
+                }
+            }
+        };
+
+        function toggleLang() {
+            lang = lang === 'ru' ? 'en' : 'ru';
+            updateUI();
+        }
+
+        function updateUI() {
+            const t = content[lang];
+            
+            document.getElementById('user-name').innerText = t.name;
+            document.getElementById('header-subtitle').innerText = t.subtitle;
+            document.getElementById('lang-switch').innerText = lang === 'ru' ? 'EN' : 'RU';
+            
+            // Sidebar Update
+            document.getElementById('velocity-title').innerText = t.velocityTitle;
+            document.getElementById('vel-label-me').innerText = t.velLabelMe;
+            document.getElementById('vel-val-me').innerText = t.velValMe;
+            document.getElementById('vel-label-market').innerText = t.velLabelMarket;
+            document.getElementById('vel-val-market').innerText = t.velValMarket;
+            document.getElementById('vel-note').innerText = t.velNote;
+
+            document.getElementById('skills-title').innerText = t.skillsTitle;
+            document.getElementById('contact-title').innerText = t.contactTitle;
+            document.getElementById('loc-val').innerText = t.loc;
+            document.getElementById('edu-val').innerText = t.edu;
+
+            // Summary
+            document.getElementById('summary-label').innerText = t.summaryLabel;
+            document.getElementById('summary-content').innerText = t.summary;
+            document.getElementById('stat-mvp').innerText = t.statMvp;
+            document.getElementById('stat-ai').innerText = t.statAi;
+            document.getElementById('stat-val').innerText = t.statVal;
+            document.getElementById('stat-exp').innerText = t.statExp;
+
+            // Experience
+            const expContainer = document.getElementById('experience-section');
+            document.getElementById('exp-header').innerText = t.expHeader;
+            expContainer.innerHTML = t.history.map(h => `
+                <div class="card p-6 animate-fade-in">
+                    <div class="flex flex-col md:flex-row justify-between md:items-center mb-4 gap-2">
+                        <div>
+                            <h4 class="text-base font-bold text-brand-900">${h.role}</h4>
+                            <p class="text-xs text-accent font-bold uppercase tracking-wider">${h.company}</p>
+                        </div>
+                        <span class="text-[10px] font-bold text-brand-400 bg-brand-50 px-3 py-1 rounded-full border border-brand-100 self-start md:self-center">${h.period}</span>
+                    </div>
+                    <p class="text-sm text-brand-600 leading-relaxed">${h.desc}</p>
+                </div>
+            `).join('');
+
+            // Lists
+            document.getElementById('focus-title').innerText = t.focusTitle;
+            document.getElementById('focus-list').innerHTML = t.focusItems.map(item => `
+                <li class="flex items-start space-x-3">
+                    <span class="text-accent">✔</span>
+                    <span class="text-brand-600">${item}</span>
+                </li>
+            `).join('');
+
+            document.getElementById('case-title').innerText = t.caseTitle;
+            document.getElementById('case-content').innerHTML = `
+                <div>
+                    <h4 class="font-bold text-sm mb-1">${t.extraCase.title}</h4>
+                    <p class="text-brand-500 leading-relaxed">${t.extraCase.desc}</p>
+                </div>
+            `;
+
+            updateCharts();
+        }
+
+        function updateCharts() {
+            const ctx = document.getElementById('skillsChart').getContext('2d');
+            if (charts.skills) charts.skills.destroy();
+            charts.skills = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: content[lang].skills,
+                    datasets: [{
+                        data: [95, 85, 90, 90, 85],
+                        backgroundColor: 'rgba(249, 115, 22, 0.1)',
+                        borderColor: '#f97316',
+                        pointBackgroundColor: '#f97316',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            min: 0, max: 100,
+                            ticks: { display: false },
+                            grid: { color: '#efefeb' },
+                            pointLabels: { font: { size: 10, weight: '600' } }
+                        }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        window.onload = updateUI;
+    </script>
+</body>
+</html>
