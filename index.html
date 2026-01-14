@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,13 +44,13 @@
                     </div>
                 </div>
                 <div>
-                    <h1 id="user-name" class="text-xl font-bold text-brand-900 leading-none">Максим Шамков</h1>
+                    <h1 id="user-name" class="text-xl font-bold text-brand-900 leading-none">Maksim Shamkou</h1>
                     <p id="header-subtitle" class="text-xs text-brand-500 mt-1 uppercase tracking-widest"></p>
                 </div>
             </div>
             
             <div class="flex items-center space-x-4">
-                <button onclick="toggleLang()" class="text-xs font-bold px-4 py-2 border border-brand-200 rounded-full hover:bg-brand-100 transition-colors uppercase" id="lang-switch">EN</button>
+                <button onclick="toggleLang()" class="text-xs font-bold px-4 py-2 border border-brand-200 rounded-full hover:bg-brand-100 transition-colors uppercase" id="lang-switch">RU</button>
             </div>
         </div>
     </header>
@@ -60,21 +60,21 @@
             
             <!-- Sidebar -->
             <aside class="lg:col-span-3 space-y-6">
-                <!-- Velocity Indicator (NEW VERSION) -->
+                <!-- Velocity Indicator -->
                 <div class="card p-6 bg-brand-900 text-white">
                     <h3 id="velocity-title" class="text-[10px] uppercase font-bold text-accent mb-4 tracking-widest"></h3>
                     <div class="space-y-4">
                         <div>
                             <div class="flex justify-between text-[10px] mb-2 uppercase font-bold">
-                                <span id="vel-label-me">Моя скорость (MVP)</span>
-                                <span class="text-accent" id="vel-val-me">6 нед</span>
+                                <span id="vel-label-me">My Speed (MVP)</span>
+                                <span class="text-accent" id="vel-val-me">6 wks</span>
                             </div>
                             <div class="velocity-bar"><div class="velocity-fill" style="width: 25%"></div></div>
                         </div>
                         <div>
                             <div class="flex justify-between text-[10px] mb-2 uppercase font-bold text-brand-400">
-                                <span id="vel-label-market">Рынок (Среднее)</span>
-                                <span id="vel-val-market">24 нед</span>
+                                <span id="vel-label-market">Market (Avg)</span>
+                                <span id="vel-val-market">24 wks</span>
                             </div>
                             <div class="velocity-bar"><div class="bg-brand-700 h-full" style="width: 100%"></div></div>
                         </div>
@@ -158,12 +158,12 @@
 
     <footer class="bg-white border-t border-brand-200 py-8 mt-12">
         <div class="max-w-7xl mx-auto px-6 text-center">
-            <p class="text-[10px] text-brand-400 uppercase tracking-widest font-bold">Maksim Shamkou &copy; 2025 | R&D Lead Portfolio</p>
+            <p id="footer-copy" class="text-[10px] text-brand-400 uppercase tracking-widest font-bold"></p>
         </div>
     </footer>
 
     <script>
-        let lang = 'ru';
+        let lang = 'en';
         let charts = {};
 
         const content = {
@@ -189,7 +189,9 @@
                 expHeader: "Профессиональный опыт",
                 focusTitle: "Зоны фокуса R&D",
                 caseTitle: "Дополнительные кейсы",
+                footer: "Maksim Shamkou © 2026 | R&D Lead Portfolio",
                 skills: ["Геймплей", "Бизнес", "Технологии", "Процессы", "Лидерство"],
+                skillValues: [70, 95, 75, 90, 80],
                 history: [
                     { 
                         company: "Kaelis AI", 
@@ -243,13 +245,15 @@
                 expHeader: "Professional Experience",
                 focusTitle: "R&D Focus Areas",
                 caseTitle: "Additional Cases",
+                footer: "Maksim Shamkou © 2026 | R&D Lead Portfolio",
                 skills: ["Gameplay", "Business", "Tech", "Processes", "Leadership"],
+                skillValues: [70, 95, 75, 90, 80],
                 history: [
                     { 
                         company: "Kaelis AI", 
                         role: "Founder / R&D Lead", 
                         period: "July 2025 — Present",
-                        desc: "Founder-led R&D and product sandbox focused on AI-assisted workflows. Delivered MVP in 6–8 weeks. Full AI integration: ideation, content, validation." 
+                        desc: "Founder-led R&D and product experimentation sandbox focused on AI-assisted workflows. Delivered MVP in 6–8 weeks. Full AI integration: ideation, content, validation." 
                     },
                     { 
                         company: "Oblocze (G-Devs)", 
@@ -343,6 +347,8 @@
                 </div>
             `;
 
+            document.getElementById('footer-copy').innerText = t.footer;
+
             updateCharts();
         }
 
@@ -354,7 +360,7 @@
                 data: {
                     labels: content[lang].skills,
                     datasets: [{
-                        data: [95, 85, 90, 90, 85],
+                        data: content[lang].skillValues,
                         backgroundColor: 'rgba(249, 115, 22, 0.1)',
                         borderColor: '#f97316',
                         pointBackgroundColor: '#f97316',
